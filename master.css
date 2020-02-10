@@ -1,0 +1,70 @@
+body {
+  font-family: sans-serif;
+  margin: 0px;
+}
+
+.container {
+  margin: auto;
+  overflow: hidden;
+  width: 80%;
+}
+
+li {
+  margin-bottom: 10px;
+}
+
+nav {
+  background: lightblue;
+  overflow: hidden;
+}
+
+nav h1 {
+  float:left;
+  margin-left: 20px;
+}
+
+nav p {
+  float: right;
+  margin-right: 20px;
+  margin-top: 24px;
+}
+
+#instructions p {
+  text-align: center;
+}
+
+#options .save-load {
+  display: flex;
+}
+
+#options button, .send-button button  {
+  width: 100%;
+  height: 50px;
+}
+
+.rule {
+  margin: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.rule p, .rule button {
+  display: inline;
+  margin: 10px;
+}
+
+.rule button {
+  height: 34px;
+}
+
+.text-field {
+  text-align: center;
+  margin: 10px 0px;
+}
+
+.predefs {
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 10px;
+}

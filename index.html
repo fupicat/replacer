@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="master.css">
+    <title>Replacer</title>
+  </head>
+  <body>
+    <nav>
+      <h1>Replacer</h1>
+      <p>Formate texto rapidamente.</p>
+    </nav>
+    <section id='instructions'>
+      <div class="container">
+        <p>Selecione uma predefinição abaixo ou crie suas próprias regras.</p>
+      </div>
+    </section>
+    <section id='options'>
+      <div class="container">
+        <div class="predefs">
+          <a href="javascript:template(owa)">Outlook</a>
+          <a href="javascript:template(text2morse)">Texto->Morse</a>
+          <a href="javascript:template(morse2text)">Morse->Texto</a>
+        </div>
+        <div class="save-load">
+          <button onclick="save()">Salvar template</button>
+          <button onclick="openFile()">Abrir template</button>
+          <input id="file-input" type="file" accept="application/json" style="display: none;" />
+        </div>
+        <button type="button" name="add" onclick="addRule()">+ Adicionar regra</button>
+      </div>
+    </section>
+    <section id='rules'>
+      <div class="container" id='rule-list'>
+
+      </div>
+    </section>
+
+    <section id='text-fields'>
+      <div class="container">
+        <div class="text-field">
+          <h1>Entrada</h1>
+          <textarea name="input" rows="8" cols="100" placeholder="Cole aqui o texto a ser formatado" id='input-field'></textarea>
+        </div>
+        <div class="send-button">
+          <button type="button" name="send" onclick="format()">V Enviar V</button>
+        </div>
+        <div class="text-field">
+          <h1>Saída</h1>
+          <textarea name="input" rows="8" cols="100" placeholder="Resultado" id='output-field'></textarea>
+        </div>
+      </div>
+    </section>
+
+    <article>
+      <div class="container">
+        <h1>Info</h1>
+        <h3>Sobre</h3>
+        <p>
+          Esta é uma ferramenta simples para substituir elementos de texto por outros.
+          Clique em "+ Adicionar regra" para criar uma regra de substituição.
+          Qualquer aparência do primeiro fragmento de texto na entrada será substituída pelo segundo.
+          A ordem de execução das regras é dada de cima para baixo.
+        </p>
+        <h3>Casos especiais</h3>
+        <ul>
+          <li>
+            Para remover um fragmento de texto, deixe a segunda caixa de texto do criador de regra em branco.
+            <ul>
+              <li>Ex: "Substitua [abcd] por []" remove todas as aparições de "abcd" do texto de entrada.</li>
+            </ul>
+          </li>
+          <li>
+            Para inserir um fragmento entre cada caractere, deixe a primeira caixa de texto do criador de regra em branco.
+            <ul>
+              <li>Ex: "Substitua [] por [, ]" coloca uma vírgula e um espaço depois de cada caractere do texto de entrada.</li>
+            </ul>
+          </li>
+          <li>
+            Você pode usar "\n" (contrabarra + n) para representar uma quebra de linha (enter) no criador de regra.
+            <ul>
+              <li>Ex: "Substitua [\n] por [;\n]" coloca um ponto e vírgula depois de cada linha.</li>
+            </ul>
+          </li>
+          <li>
+            Use "\número" na <b>primeira</b> caixa de texto do criador de regra para inserir um fragmento naquele caractere do texto. Use "\end" para representar o último caractere.
+            <ul>
+              <li>Ex: "Substitua [\0] por [Olá, ]" coloca um "Olá, " no início do texto.</li>
+              <li>Ex: "Substitua [\6] por [wasd]" coloca um "wasd" antes do sexto caractere do texto.</li>
+              <li>Ex: "Substitua [\end] por [!]" coloca um ponto de exclamação no final do texto.</li>
+            </ul>
+          </li>
+          <li>
+            Use "\número-número" na <b>primeira</b> caixa de texto do criador de regra para substituir os caracteres entre os números por um fragmento. Use "end" em qualquer dos lugares para representar o último caractere.
+            <ul>
+              <li>Ex: "Substitua [\0-end] por []" deleta o texto todo.</li>
+              <li>Ex: "Substitua [\6-10] por [wasd]" substitui os caracteres de 6 a 10 por "wasd".</li>
+              <li>Ex: "Substitua [\end-0] por [ ]" repete o texto duas vezes com um espaço no meio.</li>
+            </ul>
+          </li>
+          <li>
+            Use "\\número" na <b>primeira</b> caixa de texto do criador de regra para não obedecer as regras de substituição acima. Nesse caso as duas contrabarras agirão como uma só.
+            <ul>
+              <li>Ex: "Substitua [\\0] por []" remove "\0" do texto.</li>
+              <li>Ex: "Substitua [\\\end-6] por []" remove "\\end-6" do texto.</li>
+            </ul>
+          </li>
+        </ul>
+        <h3>Predefinições</h3>
+        <p>O que as predefinições padrões fazem?</p>
+        <ul>
+          <li>Outlook: transforma uma lista de emails, em novas linhas, em uma lista linear de emails separados por ponto e vírgula que pode ser copiada e colada nos destinatários de um email do Outlook.</li>
+          <li>Texto->Morse: converte texto para código morse. Caracteres não permitidos: -, /, -, ç e letras com acento.</li>
+          <li>Morse->Texto: converte código morse para texto. Pontos e linhas são representados por . e -, espaços são representados por /.</li>
+        </ul>
+      </div>
+    </article>
+
+    <script src="replacer.js" charset="utf-8"></script>
+  </body>
+</html>
