@@ -1,6 +1,8 @@
 const owa = '{"inputs":["\\n", " ", ";;", ";;", ";;"], "outputs":[";", "", ";", ";", ";"]}';
 const text2morse = '{"inputs":[" ",".","a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z","1","2","3","4","5","6","7","8","9","0",",","?","\'","!","(",")","&",":",";","=","+","$","@"], "outputs":["/ ",".-.-.- ",".- ","-... ","-.-. ","-.. ",". ","..-. ","--. ",".... ",".. ",".--- ","-.- ",".-.. ","-- ","-. ","--- ",".--. ","--.- ",".-. ","... ","- ","..- ","...- ",".-- ","-..- ","-.-- ","--.. ",".---- ","..--- ","...-- ","....- ","..... ","-.... ","--... ","---.. ","----. ","-----","--..-- ","..--.. ",".----. ","-.-.-- ","-.--. ","-.--.- ",".-... ","---... ","-.-.-. ","-...- ",".-.-. ","...-..- ",".--.-. "]}';
-const morse2text = '{"inputs":["\\0", " .-.-.- "," .- "," -... "," -.-. "," -.. "," . "," ..-. "," --. "," .... "," .. "," .--- "," -.- "," .-.. "," -- "," -. "," --- "," .--. "," --.- "," .-. "," ... "," - "," ..- "," ...- "," .-- "," -..- "," -.-- "," --.. "," .---- "," ..--- "," ...-- "," ....- "," ..... "," -.... "," --... "," ---.. "," ----. "," -----"," --..-- "," ..--.. "," .----. "," -.-.-- "," -.--. "," -.--.- "," .-... "," ---... "," -.-.-. "," -...- "," .-.-. "," ...-..- "," .--.-. "," ","/"], "outputs":[" ", " . "," a "," b "," c "," d "," e "," f "," g "," h "," i "," j "," k "," l "," m "," n "," o "," p "," q "," r "," s "," t "," u "," v "," w "," x "," y "," z "," 1 "," 2 "," 3 "," 4 "," 5 "," 6 "," 7 "," 8 "," 9 "," 0 "," , "," ? "," \' "," ! "," ( "," ) "," & "," : "," ; "," = "," + "," $ "," @ ",""," "]}';
+const morse2text = '{"inputs":["\\0","\\end","...-..- ","--..-- ","..--.. ",".----. ","-.-.-- ","-.--.- ","---... ","-.-.-. ",".--.-. ",".---- ","..--- ","...-- ","....- ","..... ","-.... ","--... ","---.. ","----. ","-----","-.--. ",".-... ","-...- ",".-.-. ","-... ","-.-. ","..-. ",".... ",".--- ",".-.. ",".--. ","--.- ","...- ","-..- ","-.-- ","--.. ","-.. ","--. "," -.- "," -.- ","--- ",".-. ","... ","..- ",".-- "," .- "," .- ",".. ","-- ","-. ",". "," - "," - ",".-.-.- "," ","/"], "outputs":[" "," "," $ "," , "," ? "," \' "," ! "," ) "," : "," ; "," @ "," 1 "," 2 "," 3 "," 4 "," 5 "," 6 "," 7 "," 8 "," 9 "," 0 "," ( "," & "," = "," + "," b "," c "," f "," h "," j "," l "," p "," q "," v "," x "," y "," z "," d "," g "," k "," k "," o "," r "," s "," u "," w "," a "," a "," i "," m "," n "," e "," t "," t ",". ",""," "]}';
+
+var pressing = false;
 
 function addRule() {
   var rules = document.getElementById("rule-list");
@@ -8,8 +10,15 @@ function addRule() {
   var divider = document.createElement('div');
   divider.className = 'rule';
 
+  var upButt = document.createElement('button');
+  var text = document.createTextNode('^');
+  upButt.appendChild(text);
+  upButt.type = 'button';
+  upButt.name = 'up';
+  upButt.onclick = moveUp;
+
   var paraA = document.createElement('p');
-  var text = document.createTextNode('Substitua');
+  text = document.createTextNode('Substitua');
   paraA.appendChild(text);
 
   var inputElement = document.createElement('input');
@@ -31,18 +40,84 @@ function addRule() {
   delButt.name = 'delete';
   delButt.onclick = deleteRule;
 
+  var downButt = document.createElement('button');
+  text = document.createTextNode('v');
+  downButt.appendChild(text);
+  downButt.type = 'button';
+  downButt.name = 'down';
+  downButt.onclick = moveDown;
+
+  divider.appendChild(downButt);
   divider.appendChild(paraA);
   divider.appendChild(inputElement);
   divider.appendChild(paraB);
   divider.appendChild(outputElement);
   divider.appendChild(delButt);
+  divider.appendChild(upButt);
 
   rules.appendChild(divider);
 }
 
+window.addEventListener("keydown", function(event) {
+  if (event.defaultPrevented) {
+    return; // Do nothing if event already handled
+  } else if (event.code == 'ShiftLeft' || event.code == 'ShiftRight') {
+    pressing = true;
+  }
+});
+
+window.addEventListener("keyup", function(event) {
+  if (event.defaultPrevented) {
+    return; // Do nothing if event already handled
+  } else {
+    pressing = false;
+  }
+});
+
 function deleteRule() {
   var elem = this.parentElement;
   elem.parentElement.removeChild(elem);
+}
+
+function moveUp() {
+  var elem = this.parentElement;
+  var prev = findPrevious(elem);
+  if (pressing) {
+    prev = elem.parentElement.firstChild;
+  }
+  if (prev) {
+    elem.parentNode.insertBefore(elem, prev);
+  }
+}
+
+function moveDown() {
+  var x = event.keyCode;
+  var elem = this.parentElement;
+  var next = findNext(elem);
+  if (pressing) {
+    next = elem.parentElement.lastChild;
+  }
+  if (next) {
+    insertAfter(elem, next);
+  }
+}
+
+function findPrevious(elem) {
+   do {
+       elem = elem.previousSibling;
+   } while (elem && elem.nodeType != 1);
+   return elem;
+}
+
+function findNext(elem) {
+   do {
+       elem = elem.nextSibling;
+   } while (elem && elem.nodeType != 1);
+   return elem;
+}
+
+function insertAfter(insert, into) {
+  insert.parentElement.insertBefore(insert, into.nextSibling);
 }
 
 function format() {
@@ -55,6 +130,7 @@ function format() {
 
   var rules = document.getElementById('rule-list').children;
   for (var i = 0; i < rules.length; i++) {
+    var resultOld = result;
     var rule = rules[i];
     var ruleInput = rule.getElementsByClassName('input')[0].value;
     var ruleOutput = String(rule.getElementsByClassName('output')[0].value);
@@ -131,8 +207,6 @@ function template(text) {
   for (var z = 0; z < parts.length; z++) {
     me += parts[z];
   }
-
-  console.log(me);
 
   var data = JSON.parse(me);
 
@@ -230,7 +304,6 @@ function templateFile() {
         text += parts[z];
       }
 
-      console.log(text);
       var rulesElement = document.getElementById('rule-list');
       var data = JSON.parse(text);
 

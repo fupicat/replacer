@@ -68,3 +68,7 @@ nav p {
   justify-content: space-around;
   margin-bottom: 10px;
 }
+
+input {
+  font-family: monospace;
+}
