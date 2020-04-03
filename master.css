@@ -1,6 +1,11 @@
 body {
   font-family: sans-serif;
   margin: 0px;
+  background-color: #222846;
+}
+
+p, h1, h3, li, a {
+  color: #d4d8ec;
 }
 
 .container {
@@ -14,7 +19,7 @@ li {
 }
 
 nav {
-  background: lightblue;
+  background: #101324;
   overflow: hidden;
 }
 
@@ -37,9 +42,19 @@ nav p {
   display: flex;
 }
 
-#options button, .send-button button  {
-  width: 100%;
+#options button, .send-button button {
+  width: -moz-available;
   height: 50px;
+  margin: 5px;
+  padding: 0px;
+  border: 0px;
+  background-color: #9fa3b9;
+  transition: background-color 0.2s;
+}
+
+#options button:hover, .send-button button:hover {
+  cursor: pointer;
+  background-color: #bcc0d5;
 }
 
 .rule {
@@ -51,11 +66,36 @@ nav p {
 
 .rule p, .rule button {
   display: inline;
-  margin: 10px;
+  margin: 5px;
 }
 
 .rule button {
-  height: 34px;
+  height: 27px;
+  border: 0px;
+  padding: 0px 20px;
+  background-color: #f2d287;
+  transition: background-color 0.2s;
+}
+
+.rule button:hover {
+  cursor: pointer;
+  background-color: #f2dfb1;
+}
+
+.rule .delButt {
+  background-color: #d52f2f;
+  color: #fff;
+}
+
+.rule .delButt:hover {
+  background-color: #f46464;
+}
+
+.rule input {
+  margin: 0px 5px;
+  padding: 5px;
+  border: 0px;
+  background: #f7f7f7;
 }
 
 .text-field {
@@ -71,4 +111,11 @@ nav p {
 
 input {
   font-family: monospace;
+}
+
+textarea {
+  background-color: #0e0f0d;
+  border: 0px;
+  color: #34b329;
+  padding: 5px;
 }

@@ -39,6 +39,7 @@ function addRule() {
   delButt.appendChild(text);
   delButt.type = 'button';
   delButt.name = 'delete';
+  delButt.className = 'delButt';
   delButt.onclick = deleteRule;
 
   var downButt = document.createElement('button');
@@ -48,13 +49,13 @@ function addRule() {
   downButt.name = 'down';
   downButt.onclick = moveDown;
 
-  divider.appendChild(downButt);
+  divider.appendChild(upButt);
   divider.appendChild(paraA);
   divider.appendChild(inputElement);
   divider.appendChild(paraB);
   divider.appendChild(outputElement);
+  divider.appendChild(downButt);
   divider.appendChild(delButt);
-  divider.appendChild(upButt);
 
   rules.appendChild(divider);
 }
@@ -137,6 +138,7 @@ function format() {
     var ruleOutput = String(rule.getElementsByClassName('output')[0].value);
 
     if (ruleInput.charAt(0) == '\\' && ruleInput.charAt(1) !== '\\' && ruleInput.charAt(1) !== '') {
+      let prevInput = ruleInput
       ruleInput = ruleInput.replace('\\', '');
       var chars = ruleInput.split('-');
       if (chars.length == 1 && (!isNaN(chars[0]) || chars[0] == 'end')) {
@@ -158,7 +160,7 @@ function format() {
         result = replaceAt(result, fromChar, toChar, ruleOutput);
         continue;
       } else {
-        ruleInput = ruleInput.replace('', '\\');
+        ruleInput = prevInput;
       }
     } else if (ruleInput.charAt(0) == '\\' && ruleInput.charAt(1) == '\\') {
       ruleInput = ruleInput.replace('\\', '');
