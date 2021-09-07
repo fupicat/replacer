@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="master.css">
+    <title>Replacer</title>
+  </head>
+  <body>
+    <nav>
+      <h1>Replacer</h1>
+      <p>Automatic text editor</p>
+    </nav>
+    <section id='instructions'>
+      <div class="container">
+        <p>Choose a preset below or create your own rules.</p>
+      </div>
+    </section>
+    <section id='options'>
+      <div class="container">
+        <div class="predefs">
+          <a href="javascript:template(owa)">Outlook</a>
+          <a href="javascript:template(text2morse)">Text->Morse</a>
+          <a href="javascript:template(morse2text)">Morse->Text</a>
+        </div>
+        <div class="save-load">
+          <button onclick="save()">Save preset</button>
+          <button onclick="openFile()">Load preset</button>
+          <input id="file-input" type="file" accept="application/json" style="display: none;" />
+        </div>
+        <button type="button" name="add" onclick="addRule()">+ Create rule</button>
+      </div>
+    </section>
+    <section id='rules'>
+      <div class="container" id='rule-list'>
+
+      </div>
+    </section>
+
+    <section id='text-fields'>
+      <div class="container">
+        <div class="text-field">
+          <h1>Entrada</h1>
+          <textarea name="input" rows="8" cols="100" placeholder="Paste your text here" id='input-field'></textarea>
+        </div>
+        <div class="send-button">
+          <button type="button" name="send" onclick="format()">V Send V</button>
+        </div>
+        <div class="text-field">
+          <h1>Saída</h1>
+          <textarea name="input" rows="8" cols="100" placeholder="Result" id='output-field'></textarea>
+        </div>
+      </div>
+    </section>
+
+    <article>
+      <div class="container">
+        <h1>Info</h1>
+        <h3>About</h3>
+        <p>
+          <ul>
+            <li>This is a simple tool for replacing text fragments.</li>
+            <li>Click "+ Create rule" to create a replacement rule.</li>
+            <li>Any appearance of the first text fragment in the input will be replaced by the second.</li>
+            <li>The order of execution is from top to bottom.</li>
+            <li>Click the "^" button to move the rule up.</li>
+            <li>Click the "V" button to move the rule down.</li>
+            <li>Press the Shift key and click the buttons to make the rule go up to the top, or down to the bottom of the list.</li>
+          </ul>
+        </p>
+        <h3>Special cases</h3>
+        <ul>
+          <li>
+            To remove a text fragment, leave the second text box in the rule creator blank.
+            <ul>
+              <li>Ex: "Replace [abcd] with []" removes all appearances of "abcd" from the input text.</li>
+            </ul>
+          </li>
+          <li>
+            To insert a fragment between each character, leave the first text box in the rule creator blank.
+            <ul>
+              <li>Ex: "Replace [] eith [, ]" inserts a comma and a space after every character in the input text.</li>
+            </ul>
+          </li>
+          <li>
+            You can use "\n" (backslash + n) to represent a line break (Enter key) in the rule creator.
+            <ul>
+              <li>Ex: "Replace [\n] with [;\n]" inserts a semicolon after each line.</li>
+            </ul>
+          </li>
+          <li>
+            Use "\number" in the <b>first</b> text box in the rule creator to insert a fragment at that position in the text. Use "\end" to represent the last character.
+            <ul>
+              <li>Ex: "Replace [\0] with [Hello, ]" places "Hello, " at the beginning of the text.</li>
+              <li>Ex: "Replace [\6] with [wasd]" places "wasd" before the sixth character of the text.</li>
+              <li>Ex: "Replace [\end] with [!]" places an exclamation mark at the end of the text.</li>
+            </ul>
+          </li>
+          <li>
+            Use "\number-number" in the <b>first</b> text box in the rule creator to replace the characters between each position with a fragment. Use "end" in either place to represent the last character.
+            <ul>
+              <li>Ex: "Replace [\0-end] with []" deletes the entire text.</li>
+              <li>Ex: "Replace [\6-10] with [wasd]" replaces characters 6 through 10 with "wasd".</li>
+              <li>Ex: "Replace [\end-0] with [ ]" repeats the text twice with a space in between.</li>
+            </ul>
+          </li>
+          <li>
+            Use "\\number" in the <b>first</b> text box in the rule creator so as to not obey the substitution rules above. In that case the two backslashes will act as a single one.
+            <ul>
+              <li>Ex: "Replace [\\0] with []" removes "\0" from the text.</li>
+              <li>Ex: "Replace [\\\end-6] with []" removes "\\end-6" from the text.</li>
+            </ul>
+          </li>
+        </ul>
+        <h3>Presets</h3>
+        <p>What do the default presets do?</p>
+        <ul>
+          <li>Outlook: Turns a list of email addresses in new lines into a linear list separated by semicolons, that can be copied and pasted into Outlook.</li>
+          <li>Text->Morse: converts text to morse code. Characters not allowed: -, /, ç, capital and accented letters.</li>
+          <li>Morse->Text: converts morse code to text. Dots and dashes are represented by . and -, spaces are represented by /.</li>
+        </ul>
+      </div>
+    </article>
+
+    <script src="replacer-en.js" charset="utf-8"></script>
+  </body>
+</html>
